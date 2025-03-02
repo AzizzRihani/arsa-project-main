@@ -90,8 +90,22 @@ class BlogAssociationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // ... (your image upload logic) ...
-
+            /** @var UploadedFile $imageFile */
+            $imageFile = $form->get('image')->getData();
+        
+            if ($imageFile) {
+                $newFilename = uniqid() . '.' . $imageFile->guessExtension();
+            
+                try {
+                    $imageFile->move(
+                        $this->getParameter('images_directory'),
+                        $newFilename
+                    );
+                    $blogPost->setImage($newFilename); // ✅ Lier le fichier au Post
+                } catch (FileException $e) {
+                    $this->addFlash('error', 'Erreur lors du téléchargement de l\'image : ' . $e->getMessage());
+                }
+            }
             $entityManager->persist($blogPost);
             $entityManager->flush();
 
