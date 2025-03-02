@@ -12,15 +12,18 @@ use App\Repository\PostRepository;
 use Endroid\QrCode\Writer\PngWriter;
 use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\Encoding\Encoding;
-use Endroid\QrCode\RoundBlockSizeMode;
-use App\Controller\ErrorCorrectionLevel;
+use Endroid\QrCode\ErrorCorrectionLevel;
 use Endroid\QrCode\RoundBlockSizeMode\RoundBlockSizeModeMargin;
+use Endroid\QrCode\RoundBlockSizeMode\RoundBlockSizeModeInterface;
+use Endroid\QrCode\QrCode;
+use Endroid\QrCode\RoundBlockSizeMode;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use DateTime;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use App\Entity\Post;
 use Symfony\Component\HttpFoundation\Request;
+
 #[Route('/blog')]
 
 class BlogAssociationController extends AbstractController
@@ -58,15 +61,16 @@ class BlogAssociationController extends AbstractController
     {
         $url = $this->generateUrl('app_post_show_qr', ['id' => $post->getId()], \Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL);
 
+
         $result = Builder::create()
             ->writer(new PngWriter())
             ->writerOptions([])
             ->data($url)
             ->encoding(new Encoding('UTF-8'))
-            ->errorCorrectionLevel(ErrorCorrectionLevel::High)
+            ->errorCorrectionLevel(ErrorCorrectionLevel::Low) // Correct usage
             ->size(300)
             ->margin(10)
-            ->roundBlockSizeMode(new RoundBlockSizeModeMargin())
+            ->roundBlockSizeMode(RoundBlockSizeMode::Margin) // Correct usage
             ->build();
 
         $dataUri = $result->getDataUri();
