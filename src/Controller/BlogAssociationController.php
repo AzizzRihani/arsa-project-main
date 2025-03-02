@@ -62,7 +62,7 @@ class BlogAssociationController extends AbstractController
         $url = $this->generateUrl('app_post_show_qr', ['id' => $post->getId()], \Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL);
         $content = $post->getContenu(); // Get the post's content
 
-
+        
         $result = Builder::create()
             ->writer(new PngWriter())
             ->writerOptions([])
