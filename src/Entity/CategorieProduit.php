@@ -1,4 +1,5 @@
 <?php
+// src/Entity/CategorieProduit.php
 
 namespace App\Entity;
 
@@ -17,6 +18,9 @@ class CategorieProduit
 
     #[ORM\Column(length: 255)]
     private ?string $nom = null;
+
+    #[ORM\Column(length: 255, nullable: true)] // New field
+    private ?string $typeentreprise = null; // New field
 
     #[ORM\OneToMany(mappedBy: "categorie", targetEntity: Produit::class)]
     private Collection $produits;
@@ -42,9 +46,19 @@ class CategorieProduit
         return $this;
     }
 
+    public function getTypeentreprise(): ?string
+    {
+        return $this->typeentreprise;
+    }
+
+    public function setTypeentreprise(?string $typeentreprise): static
+    {
+        $this->typeentreprise = $typeentreprise;
+        return $this;
+    }
+
     public function getProduits(): Collection
     {
         return $this->produits;
     }
 }
-

@@ -81,9 +81,15 @@
                 <ul>
                     <li>Total <span>{{ products|length }} articles</span></li>
                 </ul>
+                <div style="display:ruby-text">
                <form action="{{ path('finaliser_commande') }}" method="post">
     <button type="submit" class="primary-btn">Finaliser la commande</button>
 </form>
+              <!-- New button to continue shopping next to "Mettre à jour le panier" -->
+                        <a href="{{ path('app_association') }}" class="primary-btn  cart-btn-right return-btn">
+                            Continuer mes achats
+                        </a>
+                        </div>
             </div>
         </div>
     </div>

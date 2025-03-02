@@ -13,6 +13,8 @@ parameters:
     google_client_secret: '%env(GOOGLE_CLIENT_SECRET)%'
     google_redirect_uri: '%env(GOOGLE_REDIRECT_URI)%'
     images_directory: '%kernel.project_dir%/public/uploads'
+    imagesProduit_directory: '%kernel.project_dir%/public/uploadsImageProduit'
+
 
 services:
     # default configuration for services in *this* file

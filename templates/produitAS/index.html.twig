@@ -3,7 +3,7 @@
 {% block title %}EcoDon - Détails du Produit{% endblock %}
 
 {% block body %}
-     <!-- Breadcrumb Section Begin -->
+    <!-- Breadcrumb Section Begin -->
     <section class="breadcrumb-section set-bg" data-setbg="{{asset('img/breadcrumb.jpg')}}"> 
         <div class="container">
             <div class="row">
@@ -22,190 +22,130 @@
     <!-- Breadcrumb Section End -->
 
     <!-- Product Section Begin -->
-    <section class="product spad">
+    <section class="productSection">
         <div class="container">
             <div class="row">
                 <div class="col-lg-3 col-md-5">
                     <div class="sidebar">
-                       <div class="sidebar__item">
-    <h4>Catégories</h4>
- <ul>
- <li><a href="{{ path('app_association') }}">Tous les produits</a></li>
-
-    {% for categorie in categories %}
-        <li>
-            <a href="{{ path('app_association', { 'categorie_id': categorie.id }) }}">
-                {{ categorie.nom }}
-            </a>
-        </li>
-    {% else %}
-        <li>Aucune catégorie disponible.</li>
-    {% endfor %}
-</ul>
-
-</div>
-
-                      
-                      {#  <div class="sidebar__item">
-                            <h4>Popular Size</h4>
-                            <div class="sidebar__item__size">
-                                <label for="large">
-                                    Large
-                                    <input type="radio" id="large">
-                                </label>
-                            </div>
-                            <div class="sidebar__item__size">
-                                <label for="medium">
-                                    Medium
-                                    <input type="radio" id="medium">
-                                </label>
-                            </div>
-                            <div class="sidebar__item__size">
-                                <label for="small">
-                                    Small
-                                    <input type="radio" id="small">
-                                </label>
-                            </div>
-                            <div class="sidebar__item__size">
-                                <label for="tiny">
-                                    Tiny
-                                    <input type="radio" id="tiny">
-                                </label>
-                            </div>
-                        </div>#}
+                        <!-- Type d'Entreprise Filter -->
                         <div class="sidebar__item">
-                            <div class="latest-product__text">
-                                <h4>Latest Products</h4>
-                                <div class="latest-product__slider owl-carousel">
-                                    <div class="latest-prdouct__slider__item">
-                                        <a href="#" class="latest-product__item">
-                                            <div class="latest-product__item__pic">
-                                                <img src="{{asset('')}}img/latest-product/lp-1.jpg" alt=""> 
-                                            </div>
-                                            <div class="latest-product__item__text">
-                                                <h6>Crab Pool Security</h6>
-                                                <span>$30.00</span>
-                                            </div>
+                            <h4>Type d'Entreprise</h4>
+                            <ul>
+                                <li class="{% if typeEntrepriseFilter is null %}active{% endif %}">
+                                    <a href="{{ path('app_association') }}">Tous les Types</a>
+                                </li>
+
+                                {% for typeEntreprise in distinctTypeEntreprises %}
+                                    <li class="{% if typeEntrepriseFilter == typeEntreprise.typeentreprise %}active{% endif %}">
+                                        <a href="{{ path('app_association', { 
+                                            'typeentreprise_filter': typeEntreprise.typeentreprise, 
+                                            'quantity_filter': quantityFilter, 
+                                            'date_filter': dateFilter,
+                                            'categorie_id': categorieId 
+                                        }) }}">
+                                            {{ typeEntreprise.typeentreprise }}
                                         </a>
-                                        <a href="#" class="latest-product__item">
-                                            <div class="latest-product__item__pic">
-                                                <img src="{{asset('img/latest-product/lp-2.jpg')}}" alt="">
-                                            </div>
-                                            <div class="latest-product__item__text">
-                                                <h6>Crab Pool Security</h6>
-                                                <span>$30.00</span>
-                                            </div>
+                                    </li>
+                                {% else %}
+                                    <li>Aucun type disponible.</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+
+                        <!-- Catégories Filter -->
+                        <div class="sidebar__item">
+                            <h4>Catégories</h4>
+                            <ul>
+                                <li class="{% if categorieId is null %}active{% endif %}">
+                                    <a href="{{ path('app_association', { 
+                                        'typeentreprise_filter': typeEntrepriseFilter, 
+                                        'quantity_filter': quantityFilter, 
+                                        'date_filter': dateFilter 
+                                    }) }}">Tous les produits</a>
+                                </li>
+
+                                {% for categorie in categories %}
+                                    <li class="{% if categorie.id == categorieId %}active{% endif %}">
+                                        <a href="{{ path('app_association', { 
+                                            'categorie_id': categorie.id, 
+                                            'typeentreprise_filter': typeEntrepriseFilter, 
+                                            'quantity_filter': quantityFilter, 
+                                            'date_filter': dateFilter 
+                                        }) }}">
+                                            {{ categorie.nom }}
                                         </a>
-                                        <a href="#" class="latest-product__item">
-                                            <div class="latest-product__item__pic">
-                                                <img src="{{asset('img/latest-product/lp-3.jpg')}}" alt="">
-                                            </div>
-                                            <div class="latest-product__item__text">
-                                                <h6>Crab Pool Security</h6>
-                                                <span>$30.00</span>
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <div class="latest-prdouct__slider__item">
-                                        <a href="#" class="latest-product__item">
-                                            <div class="latest-product__item__pic">
-                                                <img src="{{asset('img/latest-product/lp-1.jpg')}}" alt="">
-                                            </div>
-                                            <div class="latest-product__item__text">
-                                                <h6>Crab Pool Security</h6>
-                                                <span>$30.00</span>
-                                            </div>
-                                        </a>
-                                        <a href="#" class="latest-product__item">
-                                            <div class="latest-product__item__pic">
-                                                <img src="{{asset('img/latest-product/lp-2.jpg')}}" alt="">
-                                            </div>
-                                            <div class="latest-product__item__text">
-                                                <h6>Crab Pool Security</h6>
-                                                <span>$30.00</span>
-                                            </div>
-                                        </a>
-                                        <a href="#" class="latest-product__item">
-                                            <div class="latest-product__item__pic">
-                                                <img src="{{asset('img/latest-product/lp-3.jpg')}}" alt="">
-                                            </div>
-                                            <div class="latest-product__item__text">
-                                                <h6>Crab Pool Security</h6>
-                                                <span>$30.00</span>
-                                            </div>
-                                        </a>
-                                    </div>
+                                    </li>
+                                {% else %}
+                                    <li>Aucune catégorie disponible.</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-lg-9 col-md-7">
+                    <div class="product__list">
+                        <div class="section-title">
+                            <h2>Produits</h2>
+                        </div>
+                    </div>
+                    <div class="filter__item">
+                        <div class="row">
+                            <div class="col-lg-5 col-md-5">
+                                <div class="filter__sort">
+                                    <span>Quantité</span>
+                                    <select id="quantityFilter" class="form-control" onchange="applyFilters()">
+                                        <option value="all" {% if quantityFilter is not defined or quantityFilter == 'all' %}selected{% endif %}>Tous</option>
+                                        <option value="small" {% if quantityFilter == 'small' %}selected{% endif %}>Petite quantité (moins de 10)</option>
+                                        <option value="medium" {% if quantityFilter == 'medium' %}selected{% endif %}>Moyenne quantité (10 - 100)</option>
+                                        <option value="large" {% if quantityFilter == 'large' %}selected{% endif %}>Grande quantité (plus de 100)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-5 col-md-5">
+                                <div class="filter__sort">
+                                    <span>Date d'Ajout</span>
+                                    <select id="dateFilter" class="form-control" onchange="applyFilters()">
+                                        <option value="all" {% if dateFilter is not defined or dateFilter == 'all' %}selected{% endif %}>Tous</option>
+                                        <option value="last_week" {% if dateFilter == 'last_week' %}selected{% endif %}>Ajoutés cette semaine</option>
+                                        <option value="last_month" {% if dateFilter == 'last_month' %}selected{% endif %}>Ajoutés ce mois-ci</option>
+                                        <option value="last_3_months" {% if dateFilter == 'last_3_months' %}selected{% endif %}>Ajoutés ces 3 derniers mois</option>
+                                        <option value="last_6_months" {% if dateFilter == 'last_6_months' %}selected{% endif %}>Ajoutés ces 6 derniers mois</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-md-4">
+                                <div class="filter__found">
+                                    <h6><span>{{ produits|length }}</span> Produits</h6>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-lg-9 col-md-7">
-             <div class="product__list">
-    <div class="section-title">
-        <h2>Produits</h2>
-    </div>
-  
-</div>
-<div class="filter__item">
-    <div class="row">
-        <div class="col-lg-4 col-md-5">
-            <div class="filter__sort">
-                <span>Sort By</span>
-                <select>
-                    <option value="0">Default</option>
-                    <option value="1">Price: Low to High</option>
-                    <option value="2">Price: High to Low</option>
-                </select>
-            </div>
-        </div>
-        <div class="col-lg-4 col-md-4">
-            <div class="filter__found">
-                <h6><span>{{ produits|length }}</span> Products found</h6>
-            </div>
-        </div>
-        <div class="col-lg-4 col-md-3">
-            <div class="filter__option">
-                <span class="icon_grid-2x2"></span>
-                <span class="icon_ul"></span>
-            </div>
-        </div>
-    </div>
-</div>
 
-<div class="row">
-    {% for produit in produits %}
-        <div class="col-lg-4 col-md-6 col-sm-6">
-            <div class="product__item">
-                <div class="product__item__pic set-bg" data-setbg="{{ asset('uploadsImageProduit/' ~ produit.image) }}">
-                    <ul class="product__item__pic__hover">
-                        <li> <a href="{{ path('select_quantity', { 'id': produit.idProduit }) }}">
-            <i class="fa fa-shopping-cart"></i>
-        </a></li>
-                    </ul>
-                </div>
-              <div class="product__item__text">
-              
-    <p> {{ produit.categorie.nom }}</p> <!-- Affichage de la catégorie -->
-    <h6><a href="#">{{ produit.nom }}</a></h6>
-    <p>Quantité disponible : {{ produit.quantiteReelle }}</p> <!-- Affichage de la quantité -->
-</div>
-
-            </div>
-        </div>
-    {% else %}
-        <p>Aucun produit disponible.</p>
-    {% endfor %}
-</div>
-
-
-
-<div class="product__pagination">
-    <a href="#">1</a>
-    <a href="#">2</a>
-    <a href="#">3</a>
-    <a href="#"><i class="fa fa-long-arrow-right"></i></a>
-</div>
+                    <div class="row">
+                        {% for produit in produits %}
+                            <div class="col-lg-4 col-md-6 col-sm-6">
+                                <div class="product__item">
+                                    <div class="product__item__pic set-bg" data-setbg="{{ asset('uploadsImageProduit/' ~ produit.image) }}">
+                                        <ul class="product__item__pic__hover">
+                                            <li>
+                                                <a href="{{ path('select_quantity', { 'id': produit.idProduit }) }}">
+                                                    <i class="fa fa-shopping-cart"></i>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="product__item__text">
+                                        <p> {{ produit.categorie.nom }}</p> <!-- Affichage de la catégorie -->
+                                        <h6><a href="#">{{ produit.nom }}</a></h6>
+                                        <p>Quantité disponible : {{ produit.quantiteReelle }}</p> <!-- Affichage de la quantité -->
+                                    </div>
+                                </div>
+                            </div>
+                        {% else %}
+                            <p>Aucun produit disponible.</p>
+                        {% endfor %}
+                    </div>
 
                 </div>
             </div>
@@ -213,6 +153,35 @@
     </section>
     <!-- Product Section End -->
 
-   
+  <script>
+   // Apply filters (quantity, date, typeEntreprise) by changing the URL with all selected filters
+function applyFilters() {
+    // Function to decode HTML entities
+function decodeHTML(str) {
+    var doc = new DOMParser().parseFromString(str, 'text/html');
+    return doc.documentElement.textContent;
+}
+    var quantityFilterValue = document.getElementById('quantityFilter').value;
+    var dateFilterValue = document.getElementById('dateFilter').value;
+    
+    // Get the values from the Twig variables, or fallback to 'null' if not defined
+    var typeEntrepriseFilterValue = "{{ typeEntrepriseFilter is not null ? typeEntrepriseFilter : '' }}";
+    var categorieIdValue = "{{ categorieId is not null ? categorieId : '' }}";
+    
+    // Encode the values to ensure they are URL-safe (handle spaces and special characters)
+    typeEntrepriseFilterValue = encodeURIComponent(decodeHTML(typeEntrepriseFilterValue));
+    categorieIdValue = encodeURIComponent(categorieIdValue);
+    
+    // Construct the URL with the selected filters
+    var url = "{{ path('app_association') }}?quantity_filter=" + quantityFilterValue 
+              + "&date_filter=" + dateFilterValue
+              + (typeEntrepriseFilterValue ? "&typeentreprise_filter=" + typeEntrepriseFilterValue : "")
+              + (categorieIdValue ? "&categorie_id=" + categorieIdValue : "");
+
+    // Redirect to the same page with the selected filters
+    window.location.href = url;
+}
+
+</script>
 
 {% endblock %}

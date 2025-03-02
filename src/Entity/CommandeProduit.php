@@ -2,8 +2,10 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\CommandeProduitRepository;
 
-#[ORM\Entity]
+
+#[ORM\Entity(repositoryClass: CommandeProduitRepository::class)]
 class CommandeProduit
 {
     #[ORM\Id]

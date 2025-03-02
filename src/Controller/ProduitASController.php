@@ -14,28 +14,41 @@ use App\Repository\ProduitRepository;
 final class ProduitASController extends AbstractController
 {
     #[Route('/Association/produit', name: 'app_association')]
-    public function index(EntityManagerInterface $entityManager, Request $request, ProduitRepository $produitRepository): Response
-    {
+public function index(EntityManagerInterface $entityManager, Request $request, ProduitRepository $produitRepository): Response
+{
+    // Retrieve filter parameters
+    $typeEntrepriseFilter = $request->query->get('typeentreprise_filter');
 
-        $categorieId = $request->query->get('categorie_id'); // Récupère l'ID de la catégorie filtrée
-        $categories = $entityManager->getRepository(CategorieProduit::class)->findAll();
- 
-          if ($categorieId) {
-            // Filtrer les produits par catégorie
-            $produits = $entityManager->getRepository(Produit::class)->findBy(['categorie' => $categorieId]);
-        } else {
-            // Récupérer tous les produits si aucune catégorie n'est sélectionnée
-            $produits = $entityManager->getRepository(Produit::class)->findAll();
-        }
-        
-        // Fetch latest products (last 5)
-        $latestProducts = $produitRepository->findLatestProducts(6);
-        return $this->render('produitas/index.html.twig', [
-            'categories' => $categories,
-            'produits' => $produits,
-            'latestProducts' => $latestProducts, 
-        ]);
-    }
+    
+    $categorieId = $request->query->get('categorie_id');
+    $quantityFilter = $request->query->get('quantity_filter');
+    $dateFilter = $request->query->get('date_filter');
+
+    // Fetch all categories (including typeEntreprise values)
+    $categories = $entityManager->getRepository(CategorieProduit::class)->findAll();
+    
+    // Fetch distinct typeEntreprise values
+    $distinctTypeEntreprises = $entityManager->getRepository(CategorieProduit::class)
+        ->createQueryBuilder('c')
+        ->select('DISTINCT c.typeentreprise')
+        ->where('c.typeentreprise IS NOT NULL')
+        ->getQuery()
+        ->getResult();
+
+    $produits = $produitRepository->findByFilters($categorieId, $quantityFilter, $dateFilter, $typeEntrepriseFilter);
+
+    return $this->render('produitas/index.html.twig', [
+        'categories' => $categories,
+        'produits' => $produits,
+        'categorieId' => $categorieId,
+        'quantityFilter' => $quantityFilter,
+        'dateFilter' => $dateFilter,
+        'typeEntrepriseFilter' => $typeEntrepriseFilter,
+        'distinctTypeEntreprises' => $distinctTypeEntreprises, // pass distinct values to the view
+    ]);
+}
+
+    
     #[Route('/Association/produit/{id}/quantity', name: 'select_quantity')]
     public function selectQuantity(int $id, Request $request, EntityManagerInterface $entityManager): Response
     {

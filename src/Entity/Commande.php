@@ -21,8 +21,9 @@ class Commande
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $date_commande = null;
 
-    //#[ORM\Column(length: 255, nullable: true)]
-    //private ?string $status = "En attente";
+    #[ORM\Column(type: Types::INTEGER, options: ['default' => 0])]
+    private ?int $status = 0;  // Valeur par défaut à 0 (En Attente)
+
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
@@ -34,6 +35,7 @@ class Commande
     {
         $this->date_commande = new \DateTime();
         $this->commandeProduits = new ArrayCollection();
+        $this->status = "0";  // Ensure status defaults to 0 in the constructor
     }
 
     public function getIdCommande(): ?int
@@ -52,16 +54,18 @@ class Commande
         return $this;
     }
 
-   /* public function getStatus(): ?string
-    {
-        return $this->status;
+    public function getStatus(): ?string
+    { 
+        return  $this->status ;
+         
+
     }
 
     public function setStatus(?string $status): static
     {
         $this->status = $status;
         return $this;
-    }*/
+    }
 
     public function getCommandeProduits(): Collection
     {
@@ -76,14 +80,15 @@ class Commande
         }
         return $this;
     }
-    public function getUser(): ?User
-{
-    return $this->user;
-}
 
-public function setUser(?User $user): static
-{
-    $this->user = $user;
-    return $this;
-}
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
+        return $this;
+    }
 }

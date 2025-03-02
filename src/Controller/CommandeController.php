@@ -47,8 +47,8 @@ public function finaliserCommande(Request $request, EntityManagerInterface $enti
             $entityManager->persist($commandeProduit);
             
             // update la quantité du produit
-            $newQuantity = $product->getQuantite() + $quantity;
-            $product->setQuantite($newQuantity);
+           // $newQuantity = $product->getQuantite() + $quantity;
+            //$product->setQuantite($newQuantity);
         }
     }
 
@@ -59,7 +59,36 @@ public function finaliserCommande(Request $request, EntityManagerInterface $enti
     $session->remove('cart');
 
     $this->addFlash('success', 'Commande enregistrée avec succès !');
-    return $this->redirectToRoute('cart_view');
+    return $this->redirectToRoute('historique_commandes');
+}
+
+#[Route('/association/historique-commandes', name: 'historique_commandes')]
+public function historiqueCommandes(EntityManagerInterface $entityManager): Response
+{
+    $user = $entityManager->getRepository(User::class)->findOneBy(['email' => 'Association1@gmail.com']);
+
+
+    // Fetch all commandes for the logged-in user
+    $commandes = $entityManager->getRepository(Commande::class)->findBy(['user' => $user]);
+
+    return $this->render('produitAs/historiqueCommandes.html.twig', [
+        'commandes' => $commandes,
+    ]);
+}
+#[Route('/association/commande/{id}', name: 'commande_details')]
+public function commandeDetails($id, EntityManagerInterface $entityManager): Response
+{
+    // Find the commande by its ID
+    $commande = $entityManager->getRepository(Commande::class)->find($id);
+
+    // Check if the commande exists
+    if (!$commande) {
+        throw $this->createNotFoundException('Commande non trouvée');
+    }
+
+    return $this->render('produitAs/commande_details.html.twig', [
+        'commande' => $commande,  // Pass the commande to the template
+    ]);
 }
 
 }
