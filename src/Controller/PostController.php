@@ -5,7 +5,7 @@ use App\Entity\Post;
 use App\Entity\Commentaire;
 use App\Form\SearchPostType;
 use App\Form\PostType;
-
+use App\Service\SmsGenerator;
 use App\Form\CommentaireType;
 use App\Repository\PostRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -148,11 +148,17 @@ class PostController extends AbstractController
         ]);
     }*/
     #[Route('/postViews/{id}', name: 'post_show')]
-    public function show(Post $post, EntityManagerInterface $em): Response
+    public function show(Post $post, EntityManagerInterface $em,SmsGenerator $smsGenerator): Response
     {
         $post->incrementViews();
         $em->flush();
-
+        $text=$post->getViews();
+        $id=$post->getId();
+        if($post->getViews()==5)
+        {
+            $number_test=$_ENV['TWILIO_TO_NUMBER'];
+            $smsGenerator->sendSms($number_test ,$id,$text);
+        }
         return $this->render('post/index.html.twig', [
             'post' => $post,
         ]);
