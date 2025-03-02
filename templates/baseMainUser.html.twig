@@ -44,16 +44,23 @@
                                 </ul>
                             </div>
                         </div>
-                        <div class="col-lg-6">
-                            <div class="header__top__right">
+                            <div class="col-lg-6">
+                            <div class="header__top__right" style="display: flex; align-items: center; gap: 15px;">
+                                <!-- Social Icons -->
                                 <div class="header__top__right__social">
                                     <a href="#"><i class="fa fa-facebook"></i></a>
                                     <a href="#"><i class="fa fa-twitter"></i></a>
                                     <a href="#"><i class="fa fa-linkedin"></i></a>
                                     <a href="#"><i class="fa fa-pinterest-p"></i></a>
                                 </div>
-                                <div class="header__top__right__auth">
-                                    <a href="{{path('app_login')}}"><i class="fa fa-user"></i> Login</a>
+                                <!-- User Info / Login -->
+                                <div class="header__top__right_auth">
+                                    {% if app.user %}
+                                        <a href="#"><i class="fa fa-user"></i> {{ app.user.nom }}</a>
+                                        <a href="{{ path('app_logout') }}"><i class="fa fa-sign-out"></i> Logout</a>
+                                    {% else %}
+                                        <a href="{{ path('app_login') }}"><i class="fa fa-user"></i> Login</a>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>

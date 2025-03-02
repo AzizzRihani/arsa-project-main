@@ -60,12 +60,13 @@ class BlogAssociationController extends AbstractController
     public function qrcode(Post $post): Response
     {
         $url = $this->generateUrl('app_post_show_qr', ['id' => $post->getId()], \Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL);
+        $content = $post->getContenu(); // Get the post's content
 
 
         $result = Builder::create()
             ->writer(new PngWriter())
             ->writerOptions([])
-            ->data($url)
+            ->data($content)
             ->encoding(new Encoding('UTF-8'))
             ->errorCorrectionLevel(ErrorCorrectionLevel::Low) // Correct usage
             ->size(300)
