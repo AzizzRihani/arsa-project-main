@@ -9,6 +9,12 @@ use Twilio\Rest\Client;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Form\PostType;
 use App\Repository\PostRepository;
+use Endroid\QrCode\Writer\PngWriter;
+use Endroid\QrCode\Builder\Builder;
+use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelHigh;
+use Endroid\QrCode\RoundBlockSizeMode\RoundBlockSizeModeMargin;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use DateTime;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -37,6 +43,38 @@ class BlogAssociationController extends AbstractController
             'blogPosts' => $blogPosts,
         ]);
     } */
+
+    #[Route('/post/{id}', name: 'app_post_show')]
+    public function show(Post $post): Response
+    {
+        return $this->render('post/show.html.twig', [
+            'post' => $post,
+        ]);
+    }
+
+    #[Route('/post/{id}/qrcode', name: 'app_post_qrcode')]
+    public function qrcode(Post $post): Response
+    {
+        $url = $this->generateUrl('app_post_show', ['id' => $post->getId()], \Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL);
+
+        $result = Builder::create()
+            ->writer(new PngWriter())
+            ->writerOptions([])
+            ->data($url)
+            ->encoding(new Encoding('UTF-8'))
+            ->errorCorrectionLevel(new ErrorCorrectionLevelHigh())
+            ->size(300)
+            ->margin(10)
+            ->roundBlockSizeMode(new RoundBlockSizeModeMargin())
+            ->build();
+
+        $dataUri = $result->getDataUri();
+
+        return $this->render('post/qrcode.html.twig', [
+            'qrcode' => $dataUri,
+            'post' => $post,
+        ]);
+    }
 
     #[Route('/association', name: 'app_association_blog')]
     public function association(Request $request, EntityManagerInterface $entityManager, PostRepository $postRepository): Response

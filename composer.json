@@ -11,6 +11,7 @@
         "doctrine/doctrine-bundle": "^2.13",
         "doctrine/doctrine-migrations-bundle": "^3.4",
         "doctrine/orm": "^3.3",
+        "endroid/qr-code": "^5.1",
         "google/apiclient": "^2.18",
         "google/cloud-ai-platform": "^1.16",
         "nyholm/psr7": "^1.8",
