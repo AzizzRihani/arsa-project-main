@@ -12,7 +12,8 @@ use App\Repository\PostRepository;
 use Endroid\QrCode\Writer\PngWriter;
 use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\Encoding\Encoding;
-use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelHigh;
+use Endroid\QrCode\RoundBlockSizeMode;
+use App\Controller\ErrorCorrectionLevel;
 use Endroid\QrCode\RoundBlockSizeMode\RoundBlockSizeModeMargin;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use DateTime;
@@ -44,10 +45,10 @@ class BlogAssociationController extends AbstractController
         ]);
     } */
 
-    #[Route('/post/{id}', name: 'app_post_show')]
+    #[Route('/post/{id}', name: 'app_post_show_qr')]
     public function show(Post $post): Response
     {
-        return $this->render('post/show.html.twig', [
+        return $this->render('post/showPost.html.twig', [
             'post' => $post,
         ]);
     }
@@ -55,14 +56,14 @@ class BlogAssociationController extends AbstractController
     #[Route('/post/{id}/qrcode', name: 'app_post_qrcode')]
     public function qrcode(Post $post): Response
     {
-        $url = $this->generateUrl('app_post_show', ['id' => $post->getId()], \Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL);
+        $url = $this->generateUrl('app_post_show_qr', ['id' => $post->getId()], \Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL);
 
         $result = Builder::create()
             ->writer(new PngWriter())
             ->writerOptions([])
             ->data($url)
             ->encoding(new Encoding('UTF-8'))
-            ->errorCorrectionLevel(new ErrorCorrectionLevelHigh())
+            ->errorCorrectionLevel(ErrorCorrectionLevel::High)
             ->size(300)
             ->margin(10)
             ->roundBlockSizeMode(new RoundBlockSizeModeMargin())

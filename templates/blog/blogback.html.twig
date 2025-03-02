@@ -191,7 +191,7 @@
 
                     <div class="row">
                         {% for blogPost in blogPosts %}
-                            <div class="col-lg-4 col-md-6 col-sm-12">
+                        <div class="col-lg-6 col-md-6 col-sm-12">
                                 <div class="blog__item">
                                     <!-- Image -->
                                     <div class="blog__item__pic">
@@ -212,6 +212,7 @@
 
                                     <!-- Buttons -->
                                     <div class="blog-actions">
+                                        <a href="{{ path('app_post_show_qr', {'postId ': blogPost.id}) }}" class="btn btn-primary">Show</a>
                                         <a href="{{ path('app_association_edit', {'id': blogPost.id}) }}" class="btn btn-primary">Modifier</a>
                                         <form action="{{ path('app_association_delete', {'id': blogPost.id}) }}" method="post">
                                             <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ blogPost.id) }}">
